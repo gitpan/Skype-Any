@@ -25,5 +25,5 @@ requires:
   perl: 5.8.1
 resources:
   license: http://dev.perl.org/licenses/
-  repository: https://github.com/akiym/Skype-Any.git
-version: 0.02
+  repository: git://github.com/akiym/Skype-Any.git
+version: 0.03

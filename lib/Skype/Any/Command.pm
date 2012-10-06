@@ -11,7 +11,6 @@ sub new {
     return bless {
         command  => $command,
         id       => -1,
-        blocking => 1,
         reply    => '',
         %$args,
     }, $class;
@@ -56,5 +55,7 @@ Return a list of command which is split. $limit is by default 4. It means that c
 =head1 ATTRIBUTES
 
 =head2 C<reply>
+
+Reply command sent.
 
 =cut
