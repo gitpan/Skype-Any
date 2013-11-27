@@ -3,8 +3,8 @@ use strict;
 use warnings;
 use parent qw/Skype::Any::Object/;
 
-sub property { shift->_property('VOICEMAIL', @_) }
-sub alter    { shift->_alter('VOICEMAIL', @_) }
+sub property { shift->SUPER::property('VOICEMAIL', @_) }
+sub alter    { shift->SUPER::alter('VOICEMAIL', @_) }
 
 1;
 __END__
@@ -15,14 +15,16 @@ Skype::Any::Object::VoiceMail - VoiceMail object for Skype::Any
 
 =head1 SYNOPSIS
 
-    use Skype::Any;
+  use Skype::Any;
 
-    my $skype = Skype::Any->new;
-    my $voicemail = $skype->voicemail($id);
+  my $skype = Skype::Any->new;
+  my $voicemail = $skype->voicemail($id);
 
 =head1 METHODS
 
-=head2 C<property>
+=over 4
+
+=item C<< $voicemail->property($property[, $value]) >>
 
 =over 4
 
@@ -52,8 +54,8 @@ Skype::Any::Object::VoiceMail - VoiceMail object for Skype::Any
 
 =back
 
-=head1 SEE ALSO
+=item C<< $voicemail->alter($action[, $value]) >>
 
-L<Skype::Any::Object>
+=back
 
 =cut

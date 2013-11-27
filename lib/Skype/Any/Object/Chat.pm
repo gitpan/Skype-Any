@@ -3,13 +3,10 @@ use strict;
 use warnings;
 use parent qw/Skype::Any::Object/;
 
-sub property { shift->_property('CHAT', @_) }
-sub alter    { shift->_alter('CHAT', @_) }
+sub property { shift->SUPER::property('CHAT', @_) }
+sub alter    { shift->SUPER::alter('CHAT', @_) }
 
-for my $property (qw/bookmarked/) {
-    no strict 'refs';
-    *{$property} = sub { $_[0]->_boolean($property) };
-}
+__PACKAGE__->_mk_bool_property(qw/bookmarked/);
 
 sub send_message {
     my ($self, $message) = @_;
@@ -28,20 +25,21 @@ Skype::Any::Object::Chat - Chat object for Skype::Any
 
 =head1 SYNOPSIS
 
-    use Skype::Any;
+  use Skype::Any;
 
-    my $skype = Skype::Any->new;
-    my $chat = $skype->chat($id);
+  my $skype = Skype::Any->new;
+  my $chat = $skype->chat($id);
 
 =head1 METHODS
 
-=head2 C<send_message>
+=over 4
 
-    $chat->send_message($message);
+=item C<< $chat->send_message($message) >>
+
 
 Send a message to chat, return instance of Skype::Any::Object::ChatMessage.
 
-=head2 C<property>
+=item C<< $chat->property($property[, $value]) >>
 
 =over 4
 
@@ -99,8 +97,8 @@ Send a message to chat, return instance of Skype::Any::Object::ChatMessage.
 
 =back
 
-=head1 SEE ALSO
+=item C<< $chat->alter($action[, $value]) >>
 
-L<Skype::Any::Object>
+=back
 
 =cut

@@ -1,34 +1,60 @@
 package Skype::Any::Command;
 use strict;
 use warnings;
-use overload q{""} => \&as_string, fallback => 1;
-use Encode ();
+use Carp ();
+use AnyEvent;
+use Skype::Any::Error;
 
 sub new {
-    my ($class, $command, $args) = @_;
-    $args ||= {};
+    my ($class, $command) = @_;
+
+    my $cv = AE::cv();
+    $cv->cb(sub { $_[0]->recv });
 
     return bless {
-        command  => $command,
-        id       => -1,
-        reply    => '',
-        %$args,
+        cv      => $cv,
+        command => $command,
+        id      => 0,
+        reply   => undef,
     }, $class;
 }
 
-sub reply { $_[0]->{reply} }
-
-sub as_string {
+sub with_id {
     my $self = shift;
-    my $cmd = sprintf '#%d %s', $self->{id}, $self->{command};
-    return Encode::encode_utf8($cmd);
+    return sprintf '#%d-%d %s', $self->{id}, $$, $self->{command};
+}
+
+sub retrieve_reply {
+    my $self = shift;
+    return $self->{reply} ||= $self->{cv}->recv;
+}
+
+sub reply {
+    my ($self, $expected) = @_;
+
+    my $reply = $self->retrieve_reply();
+    my ($obj, $params) = split /\s+/, $reply, 2;
+    if ($obj eq 'ERROR') {
+        my ($code, $description) = split /\s+/, $params, 2;
+        my $error = Skype::Any::Error->new($code, $description);
+        Carp::carp("Caught error: $error");
+        return undef;
+    }
+
+    if ($expected && $reply !~ /^\Q$expected\E/) {
+        Carp::croak("Unexpected reply from Skype, got [$reply], expected [$expected (...)]");
+    }
+
+    return $reply;
 }
 
 sub split_reply {
     my ($self, $limit) = @_;
     $limit ||= 4;
 
-    return split /\s+/, $self->{reply}, $limit;
+    my $reply = $self->reply();
+    return undef unless $reply;
+    return split /\s+/, $reply, $limit;
 }
 
 1;
@@ -40,22 +66,20 @@ Skype::Any::Command - Command interface for Skype::Any
 
 =head1 METHODS
 
-=head2 C<as_string>
+=over 4
 
-  $command->as_string();
+=item C<< $command->reply([$expected]) >>
 
-Return a command as binary string.
+Skype API doesn't guarantee an immediate response. When this method is called, (blocking) wait for a reply.
 
-=head2 C<split_reply>
+  print $skype->api->send_command('SEARCH RECENTCHATS')->reply;
 
-  $command->split_reply($limit);
+=item C<< $command->split_reply([$limit]) >>
 
-Return a list of command which is split. $limit is by default 4. It means that command splits to obj, id, property, value.
+Return a list of commands which is split. $limit is by default 4.
 
-=head1 ATTRIBUTES
+  my ($obj, $id, $property, $value) = $command->split_reply();
 
-=head2 C<reply>
-
-Reply command sent.
+=back
 
 =cut

@@ -3,12 +3,9 @@ use strict;
 use warnings;
 use parent qw/Skype::Any::Object/;
 
-sub property { shift->_property('CHATMEMBER', @_) }
+sub property { shift->SUPER::property('CHATMEMBER', @_) }
 
-for my $property (qw/is_active/) {
-    no strict 'refs';
-    *{$property} = sub { $_[0]->_boolean($property) };
-}
+__PACKAGE__->_mk_bool_property(qw/is_active/);
 
 1;
 __END__
@@ -26,7 +23,9 @@ Skype::Any::Object::ChatMember - ChatMember object for Skype::Any
 
 =head1 METHODS
 
-=head2 C<property>
+=over 4
+
+=item C<< $chatmember->property($property[, $value]) >>
 
 =over 4
 
@@ -40,8 +39,6 @@ Skype::Any::Object::ChatMember - ChatMember object for Skype::Any
 
 =back
 
-=head1 SEE ALSO
-
-L<Skype::Any::Object>
+=back
 
 =cut

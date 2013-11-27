@@ -3,18 +3,7 @@ use strict;
 use warnings;
 use parent qw/Skype::Any::Object/;
 
-sub property {
-    my ($self, $property, $value) = @_;
-    $property = uc $property;
-    my $cmd = sprintf 'PROFILE %s', $property;
-    if (!defined $value) {
-        my $command = $self->api->send_command(sprintf('GET %s', $cmd), $cmd);
-        my @reply = $command->split_reply(3);
-        return $reply[2];
-    } else {
-        $self->api->send_command(sprintf('SET %s %s', $cmd, $value), $cmd);
-    }
-}
+sub property { shift->SUPER::property('PROFILE', @_) }
 
 1;
 __END__
@@ -25,14 +14,16 @@ Skype::Any::Object::Profile - Profile object for Skype::Any
 
 =head1 SYNOPSIS
 
-    use Skype::Any;
+  use Skype::Any;
 
-    my $skype = Skype::Any->new;
-    my $profile = $skype->profile();
+  my $skype = Skype::Any->new;
+  my $profile = $skype->profile();
 
 =head1 METHODS
 
-=head2 C<property>
+=over 4
+
+=item C<< $profile->property($property[, $value]) >>
 
 =over 4
 
@@ -84,8 +75,6 @@ Skype::Any::Object::Profile - Profile object for Skype::Any
 
 =back
 
-=head1 SEE ALSO
-
-L<Skype::Any::Object>
+=back
 
 =cut
