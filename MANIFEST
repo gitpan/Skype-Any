@@ -4,9 +4,9 @@ LICENSE
 META.json
 README.md
 cpanfile
-image/dialog.png
-image/manage.png
-image/myapp-dialog.png
+img/dialog.png
+img/manage.png
+img/myapp-dialog.png
 lib/Skype/Any.pm
 lib/Skype/Any/API.pm
 lib/Skype/Any/API/darwin.pm

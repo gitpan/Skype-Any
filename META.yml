@@ -10,7 +10,7 @@ configure_requires:
   CPAN::Meta::Prereqs: 0
   Module::Build: 0.38
 dynamic_config: 0
-generated_by: 'Minilla/v0.9.0, CPAN::Meta::Converter version 2.120921'
+generated_by: 'Minilla/v0.11.0, CPAN::Meta::Converter version 2.120921'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -29,7 +29,7 @@ no_index:
 provides:
   Skype::Any:
     file: lib/Skype/Any.pm
-    version: 0.04
+    version: 0.05
   Skype::Any::API:
     file: lib/Skype/Any/API.pm
     version: 0
@@ -100,5 +100,5 @@ requires:
 resources:
   bugtracker: https://github.com/akiym/Skype-Any/issues
   homepage: https://github.com/akiym/Skype-Any
-  repository: https://github.com/akiym/Skype-Any.git
-version: 0.04
+  repository: git://github.com/akiym/Skype-Any.git
+version: 0.05
