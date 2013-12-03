@@ -28,6 +28,7 @@ lib/Skype/Any/Object/Profile.pm
 lib/Skype/Any/Object/SMS.pm
 lib/Skype/Any/Object/User.pm
 lib/Skype/Any/Object/VoiceMail.pm
+minil.toml
 t/00_compile.t
 xt/02_perlcritic.t
 xt/04_pod_coverage.t
